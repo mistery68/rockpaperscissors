@@ -18,6 +18,7 @@ class Player():
         self.my_move = my_move
         self.their_move = their_move
 
+
 class RandomPlayer(Player):
     def move(self):
         return random.choice(moves)
@@ -40,25 +41,22 @@ class ReflectPlayer(Player):
         else:
             return self.their_move
 
+    def learn(self, my_move, their_move):
+        self.their_move = their_move
 
 class Cycles(Player):
-    def __init__(self):
-        Player.__init__(self)
-        self.step = 0
-
     def move(self):
-        choice = None
-        if self.step == 0:
-            choice = moves[0]
-            self.step = self.step + 1
-        elif self.step == 1:
-            choice = moves[1]
-            self.step = self.step + 1
-        else:
-            choice = moves[2]
-            self.step = self.step + 1
-        return choice
+        if self.my_move == None:
+            return random.choice(moves)
+        elif self.my_move == "rock":
+            return "paper"
+        elif self.my_move == "paper":
+            return "scissors"
+        elif self.my_move == "scissors":
+            return "rock"
 
+    def learn(self, my_move, their_move):
+        self.my_move = my_move
 
 class Game():
 
@@ -77,7 +75,7 @@ class Game():
             print("Player 2 won!")
         else:
             print('The game was a tie!')
-        print("The final score is" + str(self.p1.score) + " to " +
+        print("The final score is " + str(self.p1.score) + " to " +
               str(self.p2.score))
 
     def play_single(self):
@@ -97,8 +95,8 @@ class Game():
         move1 = self.p1.move()
         move2 = self.p2.move()
         result = Game.play(move1, move2)
-        self.p1.learn(move2, move1)
-        self.p2.learn(move1, move2)
+        self.p1.learn(move1, move2) #numbers reversed
+        self.p2.learn(move1, move2) #numbers reversed
 
 
     def play(self, move1, move2):
@@ -162,4 +160,4 @@ if __name__ == '__main__':
         else:
             print("Sorry, please try again!")
             rounds = input("Enter 1 for a single\
-             game and 3 for a full match: >")
+            game and 3 for a full match: >")
