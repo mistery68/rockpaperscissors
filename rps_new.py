@@ -1,6 +1,5 @@
 import random
 
-
 moves = ['rock', 'paper', 'scissors']
 
 
@@ -36,36 +35,28 @@ class HumanPlayer(Player):
 
 
 class ReflectPlayer(Player):
-    def learn(self, my_move, their_move):
-        self.my_move = their_move   #assiged their_move to self.my_move
 
+    def learn(self, my_move, their_move):
+        self.my_move = their_move
 
     def move(self):
-        if my_move is None:
+        if self.my_move is None:
             return random.choice(moves)
         else:
-            return my_move
-
+            return self.my_move
 
 class Cycles(Player):
-    def __init__ (self, index, move): #added instance variable index
-        self.index = index
-        self.move = move
-        index == 0
-        for i in range(index):
-            return move(index)
-            if sindex > 2:
-                index += 1
+    def __init__(self):
+        self.index = 0
 
     def move(self):
-        if self.index == 0:
-            return "rock"
-        elif self.index == 1:
-            return "paper"
-        elif self.index == 2:
-            return "scissors"
+        if self.index == len(moves):
+            self.index = 0
+        else:
+            self.my_move = moves[self.index]
+            self.index += 1
+            return self.my_move
 
-# no learn method here
 
 class Game():
 
@@ -105,7 +96,7 @@ class Game():
         move2 = self.p2.move()
         result = self.play(move1, move2)
         self.p1.learn(move1, move2)
-        self.p2.learn(move1, move2)
+        self.p2.learn(move2, move1)
 
 
     def play(self, move1, move2):
@@ -138,7 +129,7 @@ def beats(one, two):
 
 if __name__ == '__main__':
     print("Welcome to a game of Rock Paper Scissors!\n")
-    answer = [Player(), RandomPlayer(), Cycles(0,0), ReflectPlayer()]     # added argument for index variable
+    answer = [Player(), RandomPlayer(), Cycles(), ReflectPlayer()]
     p2 = input("What kind of opponents would you like to compete against?\n"
                "Enter r for a random player, l for a learning player, "
                "s for strategic player or just hit any key for a random "
@@ -158,7 +149,7 @@ if __name__ == '__main__':
     rounds = input("\nDo you want to play a single round or "
                    "three rounds?\n"
                    "Enter for 1 for a single round or 3 for three rounds>")
-    match = Game(p2)                                        #changed name of the instance
+    match = Game(p2)
     while True:
         if rounds == "1":
             match.play_single()
