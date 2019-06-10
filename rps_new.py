@@ -45,18 +45,22 @@ class ReflectPlayer(Player):
         else:
             return self.my_move
 
+
 class Cycles(Player):
     def __init__(self):
         self.index = 0
+        super(Cycles, self).__init__()
 
     def move(self):
+        print(self.index)
         if self.index == len(moves):
             self.index = 0
-        else:
-            self.my_move = moves[self.index]
-            self.index += 1
-            return self.my_move
 
+        self.my_move = moves[self.index]
+        self.index += 1
+        return self.my_move
+        if self.index > 2:
+            self.index.clear()
 
 class Game():
 
